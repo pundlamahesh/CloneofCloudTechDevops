@@ -1,0 +1,58 @@
+- name: Install Node Exporter
+  hosts: all
+  become: yes
+
+  vars:
+    node_exporter_version: "1.8.1"
+    node_exporter_user: "nodeusr"
+    node_exporter_port: 9100
+
+  tasks:
+
+    - name: Create node exporter user
+      ansible.builtin.user:
+        name: "{{ node_exporter_user }}"
+        shell: /sbin/nologin
+        system: yes
+
+    - name: Download node exporter
+      ansible.builtin.get_url:
+        url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+        dest: /tmp/node_exporter.tar.gz
+
+    - name: Extract node exporter
+      ansible.builtin.unarchive:
+        src: /tmp/node_exporter.tar.gz
+        dest: /tmp/
+        remote_src: yes
+
+    - name: Copy binary
+      ansible.builtin.copy:
+        src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
+        dest: /usr/local/bin/node_exporter
+        mode: '0755'
+        remote_src: yes
+
+    - name: Create systemd service file
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/node_exporter.service
+        content: |
+          [Unit]
+          Description=Node Exporter
+          After=network.target
+
+          [Service]
+          User={{ node_exporter_user }}
+          ExecStart=/usr/local/bin/node_exporter --web.listen-address=:{{ node_exporter_port }}
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Reload systemd
+      ansible.builtin.command: systemctl daemon-reexec
+
+    - name: Enable and start node exporter
+      ansible.builtin.service:
+        name: node_exporter
+        state: started
+        enabled: yes

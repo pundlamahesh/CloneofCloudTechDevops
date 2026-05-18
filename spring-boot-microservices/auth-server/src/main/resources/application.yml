@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: 'auth-server'
+  data:
+    mongodb:
+      database: auth-db
+      port: 27017
+      host: localhost
+
+server:
+  port: 8085
+    
+# Registering application in Eureka Server  
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8081/eureka
+      
+app:
+  client:
+    scope: web
+    refreshTokenValiditySeconds: 10000
+    accessTokenValiditySeconds: 10000
+    authorizedGrantTypes: password

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: s3-service
+    
+server:
+  port: 8083
+      
+# Registering application in Eureka Server  
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8081/eureka
+      
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8085/v1/auth
+
+# aws configuration
+accessKeyId: your-aws-access-key
+secretAccessKey: your-aws-secret-key
