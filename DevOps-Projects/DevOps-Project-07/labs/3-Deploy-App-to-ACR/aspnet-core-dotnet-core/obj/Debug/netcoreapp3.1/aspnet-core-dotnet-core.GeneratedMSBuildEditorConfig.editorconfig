@@ -1,0 +1,8 @@
+is_global = true
+build_property.RootNamespace = aspnet_core_dotnet_core
+build_property.ProjectDir = C:\CloneofCloudTechDevops\DevOps-Projects\DevOps-Project-07\labs\3-Deploy-App-to-ACR\aspnet-core-dotnet-core\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 
+build_property.EnableCodeStyleSeverity = 
